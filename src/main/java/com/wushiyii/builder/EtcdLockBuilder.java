@@ -4,6 +4,7 @@ import com.wushiyii.DistributeLockBuilder;
 import com.wushiyii.DistributeLockClient;
 import com.wushiyii.client.EtcdLockClient;
 import com.wushiyii.exception.DistributeLockException;
+import com.wushiyii.helper.EtcdHelper;
 
 /**
  * @Author: wgq
@@ -26,28 +27,18 @@ public class EtcdLockBuilder extends DistributeLockBuilder {
         return etcdLockBuilder;
     }
 
-    public EtcdLockBuilder urls(String[] urls) {
-        etcdLockBuilder.setUrls(urls);
+    public EtcdLockBuilder urls(String... urls) {
+        EtcdHelper.getInstance().setUrls(urls);
         return etcdLockBuilder;
     }
 
     @Override
     public DistributeLockClient build() {
-        EtcdLockBuilder instance = getInstance();
+        EtcdHelper instance = EtcdHelper.getInstance();
         if (null == instance.getUrls() || instance.getUrls().length == 0) {
             throw new DistributeLockException("Etcd urls not set, could not build client");
         }
 
-        // TODO build etcd lock helper
-
         return EtcdLockClient.getInstance();
-    }
-
-    public String[] getUrls() {
-        return urls;
-    }
-
-    public void setUrls(String[] urls) {
-        this.urls = urls;
     }
 }

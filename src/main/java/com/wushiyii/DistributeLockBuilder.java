@@ -9,7 +9,7 @@ import com.wushiyii.builder.EtcdLockBuilder;
  */
 public abstract class DistributeLockBuilder {
 
-    EtcdLockBuilder etcd() {
+    public static EtcdLockBuilder etcd() {
         return EtcdLockBuilder.getInstance();
     }
 

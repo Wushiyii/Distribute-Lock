@@ -3,6 +3,7 @@ package com.wushiyii.client;
 import com.wushiyii.DistributeLock;
 import com.wushiyii.DistributeLockClient;
 import com.wushiyii.exception.DistributeLockException;
+import com.wushiyii.lock.EtcdLock;
 
 /**
  * @Author: wgq
@@ -26,6 +27,6 @@ public class EtcdLockClient implements DistributeLockClient {
 
     @Override
     public DistributeLock getLock(String name) throws DistributeLockException {
-        return null;
+        return new EtcdLock(name);
     }
 }
