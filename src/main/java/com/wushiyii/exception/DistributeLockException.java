@@ -25,4 +25,8 @@ public class DistributeLockException extends RuntimeException {
         super(message);
         this.message = message;
     }
+
+    public DistributeLockException(Throwable cause) {
+        super(cause);
+    }
 }
