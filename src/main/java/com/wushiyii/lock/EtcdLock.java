@@ -28,7 +28,11 @@ public class EtcdLock implements DistributeLock {
             EtcdHelper.getInstance().put(key, value, ttl, "", false);
             return Boolean.TRUE;
         } catch (Exception e) {
-            logger.info("Etcd lock occur error, key={}, ttl={}, value={}", key, ttl, value, e);
+            if (e instanceof DistributeLockException) {
+                logger.error("Etcd lock occur error, key={}, ttl={}, value={}, code={}, message={}", key, ttl, value, ((DistributeLockException) e).getCode(), e.getMessage());
+            } else {
+                logger.error("Etcd lock occur error, key={}, ttl={}, value={}", key, ttl, value, e);
+            }
             return Boolean.FALSE;
         }
     }
@@ -54,10 +58,14 @@ public class EtcdLock implements DistributeLock {
     @Override
     public boolean unlock() throws DistributeLockException {
         try {
-            EtcdHelper.getInstance().delete(key, value);
+            EtcdHelper.getInstance().delete(this.key, this.value);
             return Boolean.TRUE;
-        } catch (Exception e) {
-            logger.error("Etcd unlock occur error, key={}, value={}", key, value, e);
+        }  catch (Exception e) {
+            if (e instanceof DistributeLockException) {
+                logger.error("Etcd lock occur error, key={}, value={}, code={}, message={}", key, value, ((DistributeLockException) e).getCode(), e.getMessage());
+            } else {
+                logger.error("Etcd lock occur error, key={}, value={}", key, value, e);
+            }
             return Boolean.FALSE;
         }
     }

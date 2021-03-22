@@ -45,7 +45,8 @@ public class EtcdHelper {
         payload.put(EtcdConstants.VALUE, value);
         payload.put(EtcdConstants.PREV_EXIST, prevExist.toString());
         payload.put(EtcdConstants.TTL, ttl.toString());
-        EtcdResponse etcdResponse = httpClient.putForm(determineClusterUrl(key, urls), payload, etcdResponseHandler());
+        String randomUrl = determineClusterUrl(key, urls);
+        EtcdResponse etcdResponse = httpClient.putForm(randomUrl, payload, etcdResponseHandler(randomUrl));
 
         if (Objects.nonNull(etcdResponse) && Objects.nonNull(etcdResponse.getErrorCode())) {
             throw new DistributeLockException(etcdResponse.getErrorCode(), etcdResponse.getMessage());
@@ -58,7 +59,8 @@ public class EtcdHelper {
         if (Objects.nonNull(prevValue) && !"".equals(prevValue)) {
             payload.put(EtcdConstants.PREV_VALUE, prevValue);
         }
-        EtcdResponse etcdResponse = httpClient.deleteForm(determineClusterUrl(key, urls), payload, etcdResponseHandler());
+        String randomUrl = determineClusterUrl(key, urls);
+        EtcdResponse etcdResponse = httpClient.deleteForm(randomUrl, payload, etcdResponseHandler(randomUrl));
 
         if (Objects.nonNull(etcdResponse) && Objects.nonNull(etcdResponse.getErrorCode())) {
             throw new DistributeLockException(etcdResponse.getErrorCode(), etcdResponse.getMessage());
@@ -79,19 +81,20 @@ public class EtcdHelper {
         return url[((key.hashCode()) + random.nextInt(100)) % url.length] + ETCD_PREFIX + key;
     }
 
-    private ResponseHandler<EtcdResponse> etcdResponseHandler() {
+    private ResponseHandler<EtcdResponse> etcdResponseHandler(String url) {
         return response -> {
+
+            EtcdResponse etcdResponse = JSON.parseObject(EntityUtils.toString(response.getEntity()), EtcdResponse.class);
+            log.info("Http client , url={}, response={}", url, etcdResponse);
 
             int httpCode = response.getStatusLine().getStatusCode();
 
             if (!SUCCESS_CODE_LIST.contains(httpCode)) {
-                log.info("Http client failed, response={}", response);
-                throw new DistributeLockException(httpCode, response.getStatusLine().getReasonPhrase());
+                throw new DistributeLockException(Objects.nonNull(etcdResponse) ? etcdResponse.getErrorCode() : httpCode,
+                        Objects.nonNull(etcdResponse) ? etcdResponse.getMessage() : response.getStatusLine().getReasonPhrase());
             }
-            HttpEntity httpEntity = response.getEntity();
-            String responseStr = Objects.nonNull(httpEntity) ? EntityUtils.toString(httpEntity) : null;
 
-            return JSON.parseObject(responseStr, EtcdResponse.class);
+            return etcdResponse;
         };
     }
 
