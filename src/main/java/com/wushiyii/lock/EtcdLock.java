@@ -3,9 +3,11 @@ package com.wushiyii.lock;
 import com.wushiyii.DistributeLock;
 import com.wushiyii.exception.DistributeLockException;
 import com.wushiyii.helper.EtcdHelper;
+import com.wushiyii.model.EtcdResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class EtcdLock implements DistributeLock {
@@ -23,10 +25,10 @@ public class EtcdLock implements DistributeLock {
     @Override
     public boolean lock(int ttl) throws DistributeLockException {
         try {
-            EtcdHelper.getInstance().put(key, value, "", false);
+            EtcdHelper.getInstance().put(key, value, ttl, "", false);
             return Boolean.TRUE;
         } catch (Exception e) {
-            logger.error("Etcd lock occur error, key={}, value={}", key, value, e);
+            logger.info("Etcd lock occur error, key={}, ttl={}, value={}", key, ttl, value, e);
             return Boolean.FALSE;
         }
     }

@@ -12,8 +12,6 @@ import com.wushiyii.helper.EtcdHelper;
  */
 public class EtcdLockBuilder extends DistributeLockBuilder {
 
-    private String[] urls;
-
     private static EtcdLockBuilder etcdLockBuilder;
 
     public static EtcdLockBuilder getInstance() {
