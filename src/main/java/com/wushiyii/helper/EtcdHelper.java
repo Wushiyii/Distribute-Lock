@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.wushiyii.exception.DistributeLockException;
 import com.wushiyii.model.EtcdResponse;
 import com.wushiyii.util.HttpClient;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;

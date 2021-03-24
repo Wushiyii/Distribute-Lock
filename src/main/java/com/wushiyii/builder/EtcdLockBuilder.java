@@ -12,6 +12,7 @@ import com.wushiyii.helper.EtcdHelper;
  */
 public class EtcdLockBuilder extends DistributeLockBuilder {
 
+    private EtcdLockBuilder() {};
     private static EtcdLockBuilder etcdLockBuilder;
 
     public static EtcdLockBuilder getInstance() {
@@ -32,11 +33,6 @@ public class EtcdLockBuilder extends DistributeLockBuilder {
 
     @Override
     public DistributeLockClient build() {
-        EtcdHelper instance = EtcdHelper.getInstance();
-        if (null == instance.getUrls() || instance.getUrls().length == 0) {
-            throw new DistributeLockException("Etcd urls not set, could not build client");
-        }
-
         return EtcdLockClient.getInstance();
     }
 }

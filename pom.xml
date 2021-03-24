@@ -17,6 +17,7 @@
     <junit.version>4.11</junit.version>
     <httpclient.version>4.3.3</httpclient.version>
     <fastjson.version>1.2.37</fastjson.version>
+    <redisson.version>3.11.1</redisson.version>
   </properties>
 
   <dependencies>
@@ -31,6 +32,12 @@
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>${fastjson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.redisson</groupId>
+      <artifactId>redisson</artifactId>
+      <version>${redisson.version}</version>
     </dependency>
 
     <dependency>

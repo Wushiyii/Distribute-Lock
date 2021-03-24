@@ -3,30 +3,29 @@ package com.wushiyii.client;
 import com.wushiyii.DistributeLock;
 import com.wushiyii.DistributeLockClient;
 import com.wushiyii.exception.DistributeLockException;
-import com.wushiyii.lock.EtcdLockImpl;
+import com.wushiyii.lock.RedissonLockImpl;
 
 /**
  * @Author: wgq
- * @Date: 2021/3/18 20:30
+ * @Date: 2021/3/24 13:55
  */
-public class EtcdLockClient implements DistributeLockClient {
+public class RedissonLockClient implements DistributeLockClient {
 
-    private static EtcdLockClient instance;
+    private static RedissonLockClient instance;
 
-    public static EtcdLockClient getInstance() {
+    public static RedissonLockClient getInstance() {
         if (null == instance) {
-            synchronized (EtcdLockClient.class) {
+            synchronized (RedissonLockClient.class) {
                 if (null == instance) {
-                    instance = new EtcdLockClient();
+                    instance = new RedissonLockClient();
                 }
             }
         }
         return instance;
     }
 
-
     @Override
     public DistributeLock getLock(String name) throws DistributeLockException {
-        return new EtcdLockImpl(name);
+        return new RedissonLockImpl(name);
     }
 }
