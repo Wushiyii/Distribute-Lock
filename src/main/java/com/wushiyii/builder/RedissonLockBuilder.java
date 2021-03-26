@@ -2,6 +2,7 @@ package com.wushiyii.builder;
 
 import com.wushiyii.DistributeLockBuilder;
 import com.wushiyii.DistributeLockClient;
+import com.wushiyii.client.RedissonLockClient;
 import com.wushiyii.exception.DistributeLockException;
 import com.wushiyii.helper.EtcdHelper;
 import com.wushiyii.helper.RedissonHelper;
@@ -36,6 +37,6 @@ public class RedissonLockBuilder extends DistributeLockBuilder {
     @Override
     public DistributeLockClient build() {
         RedissonHelper.getInstance().build();
-        return null;
+        return RedissonLockClient.getInstance();
     }
 }

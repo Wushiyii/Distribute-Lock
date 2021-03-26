@@ -1,4 +1,4 @@
-package com.wushiyii.lock.etcd;
+package com.wushiyii.lock.lock;
 
 
 import com.wushiyii.DistributeLock;

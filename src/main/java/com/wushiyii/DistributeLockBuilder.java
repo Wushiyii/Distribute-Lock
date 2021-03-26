@@ -1,6 +1,7 @@
 package com.wushiyii;
 
 import com.wushiyii.builder.EtcdLockBuilder;
+import com.wushiyii.builder.RedissonLockBuilder;
 
 /**
  * lock client factory
@@ -11,6 +12,10 @@ public abstract class DistributeLockBuilder {
 
     public static EtcdLockBuilder etcd() {
         return EtcdLockBuilder.getInstance();
+    }
+
+    public static RedissonLockBuilder redisson() {
+        return RedissonLockBuilder.getInstance();
     }
 
     public abstract DistributeLockClient build();

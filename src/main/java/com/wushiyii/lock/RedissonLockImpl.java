@@ -26,8 +26,7 @@ public class RedissonLockImpl extends AbstractDistributeLock {
         RedissonClient redissonClient = RedissonHelper.getInstance().getRedissonClient();
         try {
             RLock lock = redissonClient.getLock(super.key);
-            lock.lock(ttl, TimeUnit.SECONDS);
-            return Boolean.TRUE;
+            return lock.tryLock(ttl, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("Redisson lock occur error key={}, ttl={}", super.key, ttl, e);
             return Boolean.FALSE;
